@@ -1,0 +1,177 @@
+\documentclass[12pt,a4paper]{article}
+\renewcommand{\baselinestretch}{1.5}
+\usepackage{setspace} 
+\usepackage[utf8]{inputenc} % til at skrive æÆøØåÅ.
+\usepackage{amsmath,amssymb,amsfonts,mathrsfs,latexsym}
+\usepackage[british]{babel}
+\usepackage{longtable}
+\usepackage{ulem}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{titlepic}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage[colorlinks = true,
+            linkcolor = blue,
+            urlcolor  = blue,
+            citecolor = blue,
+            anchorcolor = blue]{hyperref}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{framed,color}
+\usepackage[explicit]{titlesec}
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[amsmath,thmmarks]{ntheorem} %pakke til at lave sætningsenvorinmets (kan ikke loades sammen med amsthm)
+\usepackage{color}
+
+%opsætning af graf-standarder
+\setlength{\belowcaptionskip}{20pt plus 3pt minus 2pt}
+\pgfplotsset{direct/.append style={axis lines = left,
+    xlabel = $p$,
+    ylabel = {$x$},
+every axis x label/.style={
+    at={(ticklabel* cs:1.05)},
+    anchor=west,
+},
+every axis y label/.style={
+    at={(ticklabel* cs:1.05)},
+    anchor=south,
+}    
+    }}
+\usepackage{caption} 
+\captionsetup[table]{skip=15pt}   
+\pgfplotsset{inverse/.append style={
+	axis lines = left,
+    xlabel = $x$,
+    ylabel = {$p$},
+every axis x label/.style={
+    at={(ticklabel* cs:1.05)},
+    anchor=west,
+},
+every axis y label/.style={
+    at={(ticklabel* cs:1.05)},
+    anchor=south,
+}
+    }}
+
+
+%opretter environmets til sætningsstrukturen 
+\theorembodyfont{\normalfont}
+
+	
+	%sætnings environment	
+	\newtheorem{thm}{Theorem}
+
+	\theoremstyle{break}	
+	%opgave environment	
+	\newtheorem{opg}{Opgave}	
+
+	%Korrolar environment
+	\newtheorem{coro}[thm]{Corollary}	
+	
+	%Lemma environment	
+	\newtheorem{lemma}[thm]{Lemma}
+	
+	\theoremsymbol{\ensuremath{\circ}}	
+	
+	%definition environment	
+	\newtheorem{definition}[thm]{Definition}
+	
+	%eksempel environment	
+	\newtheorem{exam}[thm]{Example}
+	
+	
+	
+	%Bevis environment
+	\theoremstyle{nonumberplain}
+	\theoremheaderfont{%
+	\normalfont\itshape}
+	\theorembodyfont{\normalfont}
+	\theoremsymbol{\ensuremath{\square}}
+	\theoremseparator{.}
+	
+	\newtheorem{proof}{Proof}
+		\theoremsymbol{}
+	\newtheorem{sol}{Løsningsforslag}
+	
+\usepackage{natbib}
+\usepackage{footmisc}
+\usepackage{multirow}
+\usepackage{csquotes} % quotes
+\usepackage{tabulary}
+
+%\setlength\parindent{0pt}
+
+%\titleformat{\section}{\Large\bfseries}{}{0pt}{#1}
+%\titleformat{\subsection}{\large\bfseries}{}{0pt}{#1}
+
+
+%nye komandoer
+\newcommand{\mR}{\mathbb{R}}
+\newcommand{\mZ}{\mathbb{Z}}
+\newcommand{\mN}{\mathbb{N}}
+\newcommand{\mQ}{\mathbb{Q}}
+\newcommand{\mC}{\mathbb{C}}
+\newcommand{\hs}{\hspace{2mm}}
+\newcommand{\Hs}{\hspace{4mm}}
+\newcommand{\pipe}{\hs | \hs}
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\vect}[1]{\underline{#1}}
+\newcommand{\matr}[1]{\underline{\underline{#1}}}
+\newcommand{\cR}{\hat{R}}
+\newcommand{\cM}{\hat{M}}
+\newcommand{\gm}{\mathfrak{m}}
+\newcommand{\gn}{\mathfrak{n}}
+\newcommand{\gR}{\text{gr }R}
+\newcommand{\bigslant}[2]{{\raisebox{.2em}{$#1$}\left/\raisebox{-.2em}{$#2$}\right.}}
+\DeclareMathOperator{\Ima}{Im}
+\newcommand{\squeezeup}{\vspace{-2.5mm}}
+
+%\numberwithin{equation}{section}
+
+
+
+%\titlepic{\includegraphics[width=0.7\textwidth]{logo.jpg}}
+
+
+
+\begin{document}
+\section*{Remote Sensing Change Detection}
+The remote sensing analysis was actually done quite simply (one I figured out how to) using QGIS. I will go through each of the steps of the analysis and the accompanying files in the folder.
+
+\begin{enumerate}
+\item First I used the SA-TIED data (your data) to detect known mining areas. I did this in Google Earth Enginge.
+	\begin{enumerate}
+	\item Load in the datapoints from the datafile. 
+	\item add a raster layer (the newest with respect to the given time-series you are looking at), in order to actually see the mines on a satellite image.
+
+	\item From here I actually just zoomed in on the mines and manually draw polygons around them, giving each of the a name and lastly saving them all in one shapefile.\\
+	Earth Engine script: \url{hhttps://code.earthengine.google.com/?scriptPath=users%2Fannabeckthelin%2Ftest%3ACreate%20mine-polygons}\\
+	Output folder: "01 Mine Polygons - Bojanala Platinum District"
+
+	\item Lastly, to visually see if the mine changed whithin the polygons over time, I created a new script with a raster-layer for each year I was considering and added the polygons on top. This was just a visual "test" and not something I used for the analysis.\\
+	Earth Engine script: \url{https://code.earthengine.google.com/?scriptPath=users%2Fannabeckthelin%2Ftest%3ALandsat8%20Mine%20Bands}
+	\end{enumerate}
+\item Next I created the albedo calculated satellite images.
+	\begin{enumerate}
+	\item I downloaded the relevant top of atmosphere (TOA) reflectance corrected satellite images via United States Geological Surveys (USGS) EarthExplorer (descriptions in thesis).
+	\item The output from USGS is a folder containing each of the bands from the given image.\\
+	Output folder (one example): "02 USGS TOA corrected images (2014)""
+	\item I uploaded the relevant rasters (band 2,3 and 4) into QGIS and simply used the raster calculater to calculate the difuse visible albedo layers (equation in thesis).\\
+	Output file: "03 alb. 2014 image.tif"
+	\end{enumerate}
+\item As a last step in data process, I used R to extract and evaluate the pixelvalues within the mine-polygons.\\
+R script: "04 R_extract_pixel_values.R"
+\end{enumerate}
+
+
+
+\end{document}
